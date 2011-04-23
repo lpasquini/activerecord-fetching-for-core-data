@@ -11,8 +11,6 @@
 
 @interface NSManagedObject (ActiveRecord)
 
-+ (void) handleErrors:(NSError *)error;
-
 + (NSUInteger) defaultBatchSize;
 + (void) setDefaultBatchSize:(NSUInteger)newBatchSize;
 

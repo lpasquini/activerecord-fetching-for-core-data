@@ -8,6 +8,7 @@
 #import "NSManagedObject+ActiveRecord.h"
 #import "NSManagedObjectContext+ActiveRecord.h"
 #import "NSPersistentStoreCoordinator+ActiveRecord.h"
+#import "NSError+Stash.h"
 #import <objc/runtime.h>
 
 static NSManagedObjectContext *defaultManageObjectContext = nil;
@@ -125,7 +126,7 @@ static NSString const * kActiveRecordManagedObjectContextKey = @"ActiveRecord_NS
 		ARLog(@"Problem saving: %@", (id)[exception userInfo] ?: (id)[exception reason]);
 	}
 
-	[ActiveRecordHelpers handleErrors:error];
+	[NSError stashError:error];
 
 	return saved && error == nil;
 }

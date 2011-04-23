@@ -21,9 +21,6 @@ typedef void (^CoreDataBlock)(NSManagedObjectContext *context);
 
 + (void) cleanUp;
 
-+ (void) handleErrors:(NSError *)error;
-- (void) handleErrors:(NSError *)error;
-
 + (void) setupCoreDataStack;
 + (void) setupCoreDataStackWithInMemoryStore;
 + (void) setupAutoMigratingCoreDataStack;

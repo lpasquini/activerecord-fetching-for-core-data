@@ -8,6 +8,7 @@
 #import "NSPersistentStoreCoordinator+ActiveRecord.h"
 #import "NSManagedObjectModel+ActiveRecord.h"
 #import "NSPersistentStore+ActiveRecord.h"
+#import "NSError+Stash.h"
 
 static NSPersistentStoreCoordinator *defaultCoordinator = nil;
 
@@ -42,7 +43,7 @@ static NSPersistentStoreCoordinator *defaultCoordinator = nil;
                                                          error:&error];
     if (!store) 
     {
-        [ActiveRecordHelpers handleErrors:error];
+        [NSError stashError:error];
     }
     [NSPersistentStore setDefaultPersistentStore:store];        
 }
@@ -116,7 +117,7 @@ static NSPersistentStoreCoordinator *defaultCoordinator = nil;
                                                                  error:&error];
     if (!store)
     {
-        [ActiveRecordHelpers handleErrors:error];
+        [NSError stashError:error];
     }
     return store;
 }

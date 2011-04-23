@@ -22,41 +22,6 @@
 	[NSPersistentStore setDefaultPersistentStore:nil];
 }
 
-+ (void) handleErrors:(NSError *)error
-{
-	if (error)
-	{
-		NSDictionary *userInfo = [error userInfo];
-		for (NSArray *detailedError in [userInfo allValues])
-		{
-			if ([detailedError isKindOfClass:[NSArray class]])
-			{
-				for (NSError *e in detailedError)
-				{
-					if ([e respondsToSelector:@selector(userInfo)])
-					{
-						ARLog(@"Error Details: %@", [e userInfo]);
-					}
-					else
-					{
-						ARLog(@"Error Details: %@", e);
-					}
-				}
-			}
-			else
-			{
-				ARLog(@"Error: %@", detailedError);
-			}
-		}
-		ARLog(@"Error Domain: %@", [error domain]);
-		ARLog(@"Recovery Suggestion: %@", [error localizedRecoverySuggestion]);	
-	}
-}
-
-- (void) handleErrors:(NSError *)error
-{
-	[[self class] handleErrors:error];
-}
 
 + (void) setupCoreDataStack
 {
