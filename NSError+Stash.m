@@ -31,8 +31,25 @@
 
 @end
 
+static id __errorStashDelegate = nil;
+static SEL __errorStashSelector = nil;
+static BOOL __errorTriggerOncePerRunloop = YES;
 
 @implementation NSError (Stash)
++ (void) setDelegate:(id) delegate {
+    __errorStashDelegate = delegate;
+}
++ (void) setDelegateSelector:(SEL) selector {
+    __errorStashSelector = selector;
+}
+
++ (void) delegateError {
+    [__errorStashDelegate performSelector:__errorStashSelector withObject:[self errorFromStash]];
+}
+
++ (void) setTriggerDelegateOncePerRunLoopOnMainThread:(BOOL)triggerOnce {
+    __errorTriggerOncePerRunloop = triggerOnce;
+}
 
 + (void) stashError:(NSError*)error {
     if (error == nil) return;
@@ -44,6 +61,16 @@
     }
     [error logError];
     [errors addObject:error];
+    
+    if (__errorStashDelegate && __errorStashSelector) {
+        if (__errorTriggerOncePerRunloop) {
+            // Trigger delegate once per run loop cycle, not immediately.  When it rains it often pours.
+            [[NSRunLoop mainRunLoop] cancelPerformSelector:@selector(delegateError) target:self argument:nil];
+            [[NSRunLoop mainRunLoop] performSelector:@selector(delegateError) target:self argument:nil order:1000 modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
+        } else {
+            [self delegateError];
+        }
+    }    
 }
 
 + (NSError*) errorFromStash {

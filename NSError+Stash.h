@@ -12,6 +12,10 @@
 
 @interface NSError (Stash)
 
++ (void) setDelegate:(id) target;
++ (void) setDelegateSelector:(SEL) selector;
++ (void) setTriggerDelegateOncePerRunLoopOnMainThread:(BOOL)triggerOnce;
+
 + (void) stashError:(NSError*)error;
 + (NSError*) errorFromStash;
 
